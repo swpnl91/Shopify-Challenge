@@ -1,0 +1,26 @@
+{
+  "name": "shopify-challenge",
+  "version": "1.0.0",
+  "description": "Backend Developer Intern Challenge",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swpnl91/Shopify-Challenge.git"
+  },
+  "author": "Swapnil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swpnl91/Shopify-Challenge/issues"
+  },
+  "homepage": "https://github.com/swpnl91/Shopify-Challenge#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.3.3"
+  }
+}
