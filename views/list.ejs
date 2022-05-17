@@ -2,24 +2,26 @@
 
 
   <div class="box" id="heading">
-    <h1> Title </h1>
+    <h1> <%= locationTitle %> </h1>
   </div>
 
   <div class="box">
     
-      
+    <% newListItems.forEach(function(newListItem) { %>
+
       <form action="/delete" method="post">
         <div class="item">
-          <input type="checkbox" name="checkbox" value="" onChange="this.form.submit()">
-          <p>      </p>
+          <input type="checkbox" name="checkbox" value="<%=newListItem._id%>" onChange="this.form.submit()">
+          <p><%=  newListItem.name  %></p>
         </div>
-        <input type="hidden" name="listName" value=""></input>
+        <input type="hidden" name="listName" value="<%= locationTitle %>"></input>
       </form>
-
+    
+    <% }) %>
 
       <form class="item" action="/" method="post">
-        <input class="itemsList" type="text" name="newItem" placeholder="New Item" autocomplete="off">
-        <button class="add" type="submit" name="list" value="">+</button>
+        <input class="itemsList" type="text" name="newItem" placeholder="Add New Item" autocomplete="off">
+        <button class="add" type="submit" name="list" value="<%= locationTitle %>">+</button>
       </form>
   </div>
 

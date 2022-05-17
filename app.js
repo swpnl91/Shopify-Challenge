@@ -20,8 +20,39 @@ const itemsSchema = new mongoose.Schema({
 
 const Item = mongoose.model("Item", itemsSchema);
 
+const item1 = new Item({
+  name: "⬅  Check this to delete an item."
+});
+
+const item2 = new Item({
+  name: "Hit '➕' below to add a new item."
+});
+
+const defaultItems = [item1, item2];
+
+const locationSchema = new mongoose.Schema({
+  name: String,
+  items: [itemsSchema]
+});
+
+const Location = mongoose.model("Location", locationSchema);
+
 app.get("/", function(req, res) {
-  res.render("list");
+  
+  Item.find({}, function(err, foundItems) {
+    if(foundItems.length === 0) {
+      Item.insertMany(defaultItems, function(err) {
+        if(err) {
+          console.log(err);
+        } else {
+          console.log("Successfully saved defaultItems to DB!");
+        }
+      });
+      res.redirect("/");
+    } else {
+      res.render("list", {locationTitle: "Toronto", newListItems: foundItems});
+    }
+  });
 });
 
 
