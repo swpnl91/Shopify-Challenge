@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const _ = require("lodash");
+const { response } = require("express");
 
 const app = express();
 
@@ -18,6 +19,10 @@ const itemsSchema = new mongoose.Schema({
 });
 
 const Item = mongoose.model("Item", itemsSchema);
+
+app.get("/", function(req, res) {
+  res.render("list");
+});
 
 
 
