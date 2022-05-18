@@ -14,14 +14,14 @@
           <input type="checkbox" name="checkbox" value="<%=newListItem._id%>" onChange="this.form.submit()">
           <p><%=  newListItem.name  %></p>
         </div>
-        <input type="hidden" name="listName" value="<%= locationTitle %>"></input>
+        <input type="hidden" name="locationName" value="<%= locationTitle %>"></input>
       </form>
     
     <% }) %>
 
       <form class="item" action="/" method="post">
         <input class="itemsList" type="text" name="newItem" placeholder="Add New Item" autocomplete="off">
-        <button class="add" type="submit" name="list" value="<%= locationTitle %>">+</button>
+        <button class="add" type="submit" name="location" value="<%= locationTitle %>">+</button>
       </form>
   </div>
 

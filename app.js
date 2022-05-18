@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const _ = require("lodash");
-const { response } = require("express");
 
 const app = express();
 
@@ -21,7 +20,7 @@ const itemsSchema = new mongoose.Schema({
 const Item = mongoose.model("Item", itemsSchema);
 
 const item1 = new Item({
-  name: "⬅  Check this to delete an item."
+  name: "⬅  Check this box to delete an item."
 });
 
 const item2 = new Item({
@@ -50,7 +49,28 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", {locationTitle: "Toronto", newListItems: foundItems});
+      res.render("list", {locationTitle: "Example", newListItems: foundItems});
+    }
+  });
+});
+
+app.get("/:customLocationName", function(req, res) {
+  const customLocationName = _.capitalize(req.params.customLocationName);
+
+  Location.findOne({name: customLocationName}, function(err, foundLocation) {
+    if(!err) {
+      if(!foundLocation) {
+        const location = new Location({
+          name: customLocationName,
+          items: defaultItems
+        });
+        location.save();
+        res.redirect("/" + customLocationName);
+      } else {
+        res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
+      }
+    } else {
+      console.log(err);
     }
   });
 });
