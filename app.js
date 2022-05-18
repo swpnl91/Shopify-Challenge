@@ -75,6 +75,34 @@ app.get("/:customLocationName", function(req, res) {
   });
 });
 
+app.post("/:customLocationName", function(req, res) {
+  if(req.body.locationName) {
+    const customLocationName = req.body.locationName;
+    if(customLocationName === "Example") {
+      res.redirect("/");
+    } else {
+      res.redirect("/" + customLocationName);
+    }
+  } else {
+    const itemName = req.body.newItem;
+    const locationName = req.body.location;
+
+    const item = new Item ({
+      name: itemName
+    });
+
+    if(locationName === "Example") {
+      item.save();
+      res.redirect("/");
+    } else {
+      Location.findOne({name: locationName}, function(eror, foundLocation){
+        foundLocation.items.push(item);
+        foundLocation.save();
+        res.redirect("/" + locationName);
+      });
+    }
+  }
+});
 
 
 
