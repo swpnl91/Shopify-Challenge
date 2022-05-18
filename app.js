@@ -89,6 +89,30 @@ app.post("/", function(req, res) {
   }
 });
 
+app.post("/delete", function(req, res) {
+  const checkedItemID = req.body.checkbox;
+  const locationName = req.body.locationDelete;     // locationDelete comes from list.ejs 1st <form>
+  
+  if(locationName === "Example") {
+    Item.findByIdAndRemove(checkedItemID, function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("Successfully deleted");
+        res.redirect("/");
+      }
+    });
+  } else {
+    Location.findOneAndUpdate({name: locationName}, {$pull: {items: {_id: checkedItemID}}}, function(err, foundLocation) {
+      if (!err) {
+        res.redirect("/" + locationName);
+      } else {
+        console.log(err);
+      }
+    });
+  }
+});
+
 
 
 
