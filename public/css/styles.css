@@ -22,18 +22,29 @@
 }
 
 
-
-
 h1 {
   color: rgb(0, 0, 0);
   padding: 10px;
   font-family: 'Montserrat', sans-serif;
+  text-decoration: underline;
+}
+
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: small;
 }
 
 #heading {
   background-color: #d8c6f7;
   text-align: center;
 }
+
+#instructions {
+  background-color: #ffffff;
+  text-align: center;
+}
+
+
 
 .box {
   max-width: 400px;

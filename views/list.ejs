@@ -5,16 +5,21 @@
     <h1> <%= locationTitle %> </h1>
   </div>
 
+  <div id="instructions">
+    <h3>☑️ Check the box to delete an item.</h3>
+    <h3>Hit '➕' below to add a new item.</h3>
+  </div>
+
   <div class="box">
     
     <% newListItems.forEach(function(newListItem) { %>
 
       <form action="/delete" method="post">
         <div class="item">
-          <input type="checkbox" name="checkbox" value="<%=newListItem._id%>" onChange="this.form.submit()">
+          <input type="checkbox" name="checkbox" value="<%= newListItem._id %>" onChange="this.form.submit()">
           <p><%=  newListItem.name  %></p>
         </div>
-        <input type="hidden" name="locationName" value="<%= locationTitle %>"></input>
+        <input type="hidden" name="locationDelete" value="<%= locationTitle %>"></input>
       </form>
     
     <% }) %>
