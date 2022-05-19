@@ -114,6 +114,12 @@ app.post("/delete", function(req, res) {
   }
 });
 
+app.post("/edit/:itemName", function(req, res) {
+  const name = req.params.itemName;
+  const location = req.body.editedItem;
+  res.render('edit', {oldItem: name, locationName: location});
+});
+
 
 
 
