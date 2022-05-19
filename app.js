@@ -55,6 +55,7 @@ app.get("/:customLocationName", function(req, res) {
         location.save();
         res.redirect("/" + customLocationName);
       } else {
+        //console.log("lol"); ////
         res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
       }
     }
@@ -112,6 +113,8 @@ app.post("/delete", function(req, res) {
     });
   }
 });
+
+
 
 
 

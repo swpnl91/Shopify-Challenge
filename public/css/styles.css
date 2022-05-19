@@ -29,21 +29,29 @@ h1 {
   text-decoration: underline;
 }
 
+h1.oldValue{
+  text-decoration: none;
+}
+
+.oldValue {
+  border-radius: 25px;
+  background: #fcb5b0;
+}
+
+h2 {
+  text-align: center;
+}
+
 h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: small;
+  font-size: medium;
+  text-align: center;
 }
 
 #heading {
   background-color: #d8c6f7;
   text-align: center;
 }
-
-#instructions {
-  background-color: #ffffff;
-  text-align: center;
-}
-
 
 
 .box {
@@ -61,6 +69,14 @@ h3 {
   border-bottom: 1px solid #F1F1F1;
 }
 
+
+.itemName {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+
 .item:last-child {
   border-bottom: 0;
 }
@@ -74,12 +90,15 @@ input[type="checkbox"] {
   margin: 20px;
 }
 
+
+
 p {
-  margin: 0;
+  margin: 0 5px;
   padding: 20px;
   font-size: 20px;
   font-weight: 200;
   color: #00204a;
+  letter-spacing: 3px;
 }
 
 form.item {
@@ -88,16 +107,41 @@ form.item {
 }
 
 button.add {
-  min-height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
   border-color: transparent;
-  background-color: #7a8ff9;
+  background-color: #8498fb;
   color: #fff;
-  font-size: 30px;
+  font-size: 2.5rem;
   padding-bottom: 6px;
   border-width: 0;
 }
+
+button.editBtn {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border-color: transparent;
+  font-size: 15px;
+  border-width: 0;
+  margin: 5px 15px;
+}
+
+button.delete {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border-color: transparent;
+  font-size: 15px;
+  border-width: 0;
+  margin: 5px;
+}
+
+
+
+
+
 
 input.itemsList {
   text-align: center;

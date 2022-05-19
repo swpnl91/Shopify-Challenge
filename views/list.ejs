@@ -5,28 +5,33 @@
     <h1> <%= locationTitle %> </h1>
   </div>
 
-  <div id="instructions">
-    <h3>☑️ Check the box to delete an item.</h3>
-    <h3>Hit '➕' below to add a new item.</h3>
-  </div>
-
   <div class="box">
     
     <% newListItems.forEach(function(newListItem) { %>
 
-      <form action="/delete" method="post">
-        <div class="item">
-          <input type="checkbox" name="checkbox" value="<%= newListItem._id %>" onChange="this.form.submit()">
-          <p><%=  newListItem.name  %></p>
-        </div>
-        <input type="hidden" name="locationDelete" value="<%= locationTitle %>"></input>
-      </form>
+      <div class="item">
+
+        <form action="/edit/<%= newListItem.name %>" method="post">
+              <button class="editBtn" type="submit" class="edit" name="editedItem" value="<%= locationTitle %>"><i class="fa-solid fa-pen-to-square"></i></button>
+              <input type="hidden" name="locationEdit" value="<%= locationTitle %>"></input>
+        </form>
+
+        <form action="/delete" method="post">
+          <div class="itemName">
+            <!-- <input type="checkbox" name="checkbox" value="<%= newListItem._id %>" onChange="this.form.submit()"></input> -->
+            <button type="submit" class="delete" name="checkbox" value="<%= newListItem._id %>"><i class="fa-solid fa-trash-can"></i></button>
+            <p><%=  newListItem.name  %></p>
+          </div>
+          <input type="hidden" name="locationDelete" value="<%= locationTitle %>"></input>
+        </form>
+
+      </div>
     
     <% }) %>
 
       <form class="item" action="/" method="post">
-        <input class="itemsList" type="text" name="newItem" placeholder="Add New Item" autocomplete="off">
-        <button class="add" type="submit" name="location" value="<%= locationTitle %>">+</button>
+        <input class="itemsList" type="text" name="newItem" placeholder="Add A New Item" autocomplete="off">
+        <button class="add" type="submit" name="location" value="<%= locationTitle %>">+</i></button>
       </form>
   </div>
 
