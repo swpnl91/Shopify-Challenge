@@ -120,6 +120,10 @@ app.post("/edit/:itemName", function(req, res) {
   res.render('edit', {oldItem: name, locationName: location});
 });
 
+app.post("/:location", function(req, res) {
+  
+});
+
 
 
 
