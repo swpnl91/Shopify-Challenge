@@ -121,7 +121,9 @@ app.post("/edit/:itemName", function(req, res) {
 });
 
 app.post("/:location", function(req, res) {
-  
+  const location = req.params.location;
+  const newItem = req.body.newValue;
+  const oldItem = req.body.oldValue;
 });
 
 
