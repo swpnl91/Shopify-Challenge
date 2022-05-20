@@ -32,34 +32,49 @@ const Location = mongoose.model("Location", locationSchema);
 
 // ROUTES
 
-app.get("/", function(req, res) {
 
-  Item.find({}, function(err, foundItems) {    // foundItems gives you back the array of items
-    res.render("list", {locationTitle: "Example", newListItems: foundItems});
-  });
+// experiment
+app.get("/", function(req, res) {
+  res.render("home");
 });
+
+
+
+
+
+
+// app.get("/", function(req, res) {
+
+//   Item.find({}, function(err, foundItems) {    // foundItems gives you back the array of items
+//     res.render("list", {locationTitle: "Example", newListItems: foundItems});
+//   });
+// });
 
 app.get("/:customLocationName", function(req, res) {
   
   const customLocationName = _.capitalize(req.params.customLocationName);
 
-  Location.findOne({name: customLocationName}, function(err, foundLocation) {   // foundLocaton gives you the object with 'name'/'items' properties
-    if(err) {
-      console.log(err);
-    } else {
-      if(foundLocation === null) {      // Got to be careful while checking whether something equals null/undefined
-        const location = new Location({
-          name: customLocationName,
-          items: defaultItems
-        });
-        location.save();
-        res.redirect("/" + customLocationName);
+  if(customLocationName === "Locations") {
+    res.render("locations");
+  } else {
+    Location.findOne({name: customLocationName}, function(err, foundLocation) {   // foundLocaton gives you the object with 'name'/'items' properties
+      if(err) {
+        console.log(err);
       } else {
-        //console.log("lol"); ////
-        res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
+        if(foundLocation === null) {      // Got to be careful while checking whether something equals null/undefined
+          const location = new Location({
+            name: customLocationName,
+            items: defaultItems
+          });
+          location.save();
+          res.redirect("/" + customLocationName);
+        } else {
+          //console.log("lol"); ////
+          res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
+        }
       }
-    }
-  });
+    });
+  }
 });
 
 app.post("/", function(req, res) {
@@ -117,13 +132,16 @@ app.post("/delete", function(req, res) {
 app.post("/edit/:itemName", function(req, res) {
   const name = req.params.itemName;
   const location = req.body.editedItem;
-  res.render('edit', {oldItem: name, locationName: location});
+  const itemId = req.body.itemId;
+
+  res.render('edit', {oldItem: name, locationName: location, itemId: itemId});
 });
 
 app.post("/:location", function(req, res) {
   const location = req.params.location;
   const newItem = req.body.newValue;
   const oldItem = req.body.oldValue;
+  const itemId = req.body.itemId;
 
   if(location === "Example") {
     Item.findOne({name: oldItem}, function(err, foundItem) {
@@ -142,12 +160,23 @@ app.post("/:location", function(req, res) {
       }
     });
   } else {
-    Location.findOneAndUpdate({name: location}, {$set: {items: {name: newItem}}}, function(err, foundLocation) {
+
+    Location.findOne({name: location}, function(err, foundItem) {
       if(err) {
         console.log(err);
       } else {
-        console.log("Successflly edited");
-        res.redirect(`/${location}`);
+        const id = foundItem._id;  // location id
+        const query = {"_id": id,
+          "items._id": itemId
+        }
+        Location.findOneAndUpdate(query, {$set: {"items.$.name": newItem }}, function(err, found) {
+          
+          if(err) {
+            console.log(err);
+          } else {
+            res.redirect(`/${location}`);
+          }
+        }); 
       }
     });
   }

@@ -13,7 +13,7 @@
 
         <form action="/edit/<%= newListItem.name %>" method="post">
               <button class="editBtn" type="submit" class="edit" name="editedItem" value="<%= locationTitle %>"><i class="fa-solid fa-pen-to-square"></i></button>
-              <input type="hidden" name="locationEdit" value="<%= locationTitle %>"></input>
+              <input type="hidden" name="itemId" value="<%= newListItem._id %>"></input>
         </form>
 
         <form action="/delete" method="post">
