@@ -124,6 +124,24 @@ app.post("/:location", function(req, res) {
   const location = req.params.location;
   const newItem = req.body.newValue;
   const oldItem = req.body.oldValue;
+
+  if(location === "Example") {
+    Item.findOne({name: oldItem}, function(err, foundItem) {
+      if(err) {
+        console.log(err);
+      } else {
+        const id = foundItem._id;
+        Item.findByIdAndUpdate(id, {$set: {name: newItem}}, function(err) {
+          if(err) {
+            console.log(err);
+          } else {
+            console.log("Successfully edited");
+            res.redirect("/");
+          }
+        }); 
+      }
+    });
+  }
 });
 
 
