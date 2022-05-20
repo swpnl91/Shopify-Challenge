@@ -141,6 +141,15 @@ app.post("/:location", function(req, res) {
         }); 
       }
     });
+  } else {
+    Location.findOneAndUpdate({name: location}, {$set: {items: {name: newItem}}}, function(err, foundLocation) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("Successflly edited");
+        res.redirect(`/${location}`);
+      }
+    });
   }
 });
 
