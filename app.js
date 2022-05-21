@@ -37,6 +37,18 @@ app.get("/", function(req, res) {
   res.render("home");
 });
 
+// ROUTE made just as a workaround to the problem MongoDB has while adding the very first location to the DB. 
+app.get("/limbo/:customLocationName", function(req, res) {
+  const customLocationName = req.params.customLocationName;
+  Location.find({}, function(err, foundLocations) {
+    if(foundLocations.length > 0) {    // Checks whether the array has any item/first entry has been created or not in the DB.  
+      res.redirect("/" + customLocationName);
+    } else if(foundLocations.length === 0) {
+      res.redirect("/limbo/" + customLocationName);   // If not then it redirects to itself and keeps on checking and in the process buys time for MongoDB.
+    }
+  })
+});
+
 app.get("/:customLocationName", function(req, res) {
   
   const customLocationName = _.capitalize(req.params.customLocationName);
@@ -61,15 +73,15 @@ app.get("/:customLocationName", function(req, res) {
       } else {
         if(foundLocation === null) {      // This condition accounts for when the location doesn't exist. Got to be careful while checking whether something equals null/undefined.
           
-          /////////////// Temporary solution to avoid creating multiple entries of a specific location. Still creates 2 entries though!
-          setTimeout(function() {
-            const location = new Location({
-              name: customLocationName,
-              items: defaultItems
-            });
-            location.save();
-            res.redirect("/" + customLocationName);
-          }, 1000);
+          /////// MongoDB takes a lot of time to create only the first entry during which multiple...
+          /////// ... redirects happen and this specific code is run, creating multiple entries.
+          
+          const location = new Location({
+            name: customLocationName,
+            items: defaultItems
+          });
+          location.save();
+          res.redirect("/limbo/" + customLocationName);
 
         } else {
           res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
