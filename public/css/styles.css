@@ -267,6 +267,11 @@ input.itemsList::placeholder {
   
 }
 
+.fa-warehouse {
+  font-size: 2rem;
+  color: #ffb9b5;
+}
+
 .fa-parachute-box {
   font-size: 10rem;
   color: #f1b4b4;
