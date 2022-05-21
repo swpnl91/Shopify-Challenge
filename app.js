@@ -21,7 +21,7 @@ const itemsSchema = new mongoose.Schema({
 
 const Item = mongoose.model("Item", itemsSchema);
 
-const defaultItems = [];  // creating an empty array so that it can be assigned to 'items' property of the newly created Location and it won't have its value as null
+const defaultItems = [];  // Creating an empty array so that it can be assigned to 'items' property of the newly created Location and it won't have its value as null.
 
 const locationSchema = new mongoose.Schema({
   name: String,
@@ -29,6 +29,7 @@ const locationSchema = new mongoose.Schema({
 });
 
 const Location = mongoose.model("Location", locationSchema);
+
 
 // ROUTES
 
@@ -40,8 +41,8 @@ app.get("/:customLocationName", function(req, res) {
   
   const customLocationName = _.capitalize(req.params.customLocationName);
 
-  if(customLocationName === "Locations") {
-    Location.find({}, function(err, foundLocations) {
+  if(customLocationName === "Locations") {     // This condition handles the rendering of the list of lcations.
+    Location.find({}, function(err, foundLocations) {   // foundLocations is an array of objects. This query returns all the location objects.
       if(err) {
         console.log(err);
       } else {
@@ -49,57 +50,28 @@ app.get("/:customLocationName", function(req, res) {
         for(const location of foundLocations) {
           array.push(location.name);
         }
-        const distinctLocations = [...new Set(array)];
+        const distinctLocations = [...new Set(array)];   // ES6-specific way of removing duplicate items in an array.
         res.render("locations", {locationsArray: distinctLocations});
       }
     });
-  } else {
-    Location.findOne({name: customLocationName}, function(err, foundLocation) {   // foundLocaton gives you the object with 'name'/'items' properties
+  } else {       // The else part handles the saving of the location
+    Location.findOne({name: customLocationName}, function(err, foundLocation) {   // foundLocaton gives you a matched object with 'name' & 'items' as properties.
       if(err) {
         console.log(err);
       } else {
-        console.log("foundLocation  -  " + foundLocation);
-
-        if(foundLocation === null) {      // Got to be careful while checking whether something equals null/undefined
+        if(foundLocation === null) {      // This condition accounts for when the location doesn't exist. Got to be careful while checking whether something equals null/undefined.
           
-          // Location.find({}, function(err, found) {
-          //   if(err) {
-          //     console.log(err);
-          //   } else {
-          //     if(found.length === 0) {
-          //       setTimeout(function() {
-
-          //         const location = new Location({
-          //           name: customLocationName,
-          //           items: defaultItems
-          //         });
-          //         location.save();
-          //         res.redirect("/" + customLocationName);
-        
-          //       }, 1000);
-          //     }
-          //   }
-          // });
-
+          /////////////// Temporary solution to avoid creating multiple entries of a specific location. Still creates 2 entries though!
           setTimeout(function() {
-
             const location = new Location({
               name: customLocationName,
               items: defaultItems
             });
             location.save();
             res.redirect("/" + customLocationName);
-  
           }, 1000);
 
         } else {
-          // Location.find({name: customLocationName}, function(err, duplicates) {
-          //   if(duplicates.length > 1) {
-          //     Location.findOneAndUpdate({name: customLocationName}, {$pull: {name: customLocationName}}, function(err, found) {
-          //       console.log(found);
-          //     });
-          //   }
-          // });
           res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
         }
       }
@@ -109,30 +81,34 @@ app.get("/:customLocationName", function(req, res) {
 
 app.post("/", function(req, res) {
 
-  if(req.body.newItem === "" || req.body.locationName === "") {
+  if(req.body.newItem === "" || req.body.locationName === "") {    // This condition accounts for when the input field is left blank and the form is submitted.
     res.render("error");
   } else {
-    if(req.body.newItem === undefined) {     // Got to be careful while checking whether something equals null/undefined
-      const customLocationName = req.body.locationName; // locationName comes from header.ejs
-      res.redirect("/" + customLocationName); 
+    if(req.body.newItem === undefined) {     // Got to be careful while checking whether something equals null/undefined.
+      if(req.body.locationName.trim() === "") {    // This condition accounts for when the input field has only spaces and the form is submitted.
+        res.render("error");
+      } else {
+        const customLocationName = req.body.locationName; // locationName comes from header.ejs
+        res.redirect("/" + customLocationName); 
+      } 
     } 
     if(req.body.locationName === undefined) {
-      
-      const itemName = req.body.newItem;     // newItem comes from list.ejs 2nd <form>
-      const locationName = req.body.location;   // location comes from list.ejs 2nd <form>
-  
-      const item = new Item ({
-        name: itemName
-      });
-  
-      if(locationName === "Example") {
-        item.save();
-        res.redirect("/");
+      if(req.body.newItem.trim() === "") {
+        res.render("error");
       } else {
-        Location.findOne({name: locationName}, function(eror, foundLocation){
-          foundLocation.items.push(item);
-          foundLocation.save();
-          res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
+        const itemName = req.body.newItem;     // newItem comes from list.ejs 3rd <form>
+        const locationName = req.body.location;   // location comes from list.ejs 3rd <form>
+        const item = new Item ({
+          name: itemName
+        });
+        Location.findOne({name: locationName}, function(err, foundLocation){
+          if(err) {
+            console.log(err);
+          } else {
+            foundLocation.items.push(item);
+            foundLocation.save();
+            res.render("list", {locationTitle: foundLocation.name, newListItems: foundLocation.items});
+          }
         });
       }
     }
@@ -140,18 +116,18 @@ app.post("/", function(req, res) {
 });
 
 app.post("/delete", function(req, res) {
-  const checkedItemID = req.body.checkbox;
-  const locationName = req.body.locationDelete;     // locationDelete comes from list.ejs 1st <form>
+  const checkedItemID = req.body.checkbox;          // checkbox comes from list.ejs 2nd <form>
+  const locationName = req.body.locationDelete;     // locationDelete comes from list.ejs 2nd <form>
 
-  const locationToDelete = req.body.locationToDelete;
+  const locationToDelete = req.body.locationToDelete;   // locationToDelete comes from locations.ejs 1st <form>
 
-  if(locationToDelete) {
+  if(locationToDelete) {    // This condition handles if there is a request to delete a location from the list of locations.
     Location.deleteOne({name: locationToDelete}, function(err) {
       if(err) {
         console.log(err);
       } else {
         console.log("Successfully deleted");
-        Location.find({}, function(err, foundLocations) {
+        Location.find({}, function(err, foundLocations) {   // This part renders the whole locations list
           if(err) {
             console.log(err);
           } else {
@@ -159,13 +135,14 @@ app.post("/delete", function(req, res) {
             for(const location of foundLocations) {
               array.push(location.name);
             }
-            const distinctLocations = [...new Set(array)];
+            const distinctLocations = [...new Set(array)];   // To remove the multiple entries that get created.
             res.render("locations", {locationsArray: distinctLocations});
           }
         });
       }
     });
   } else {
+    // This handles the deletion of a particular item at a given location
     Location.findOneAndUpdate({name: locationName}, {$pull: {items: {_id: checkedItemID}}}, function(err, foundLocation) {
       if (!err) {
         res.redirect("/" + locationName);
@@ -174,78 +151,39 @@ app.post("/delete", function(req, res) {
       }
     });
   }
-  
-  // if(locationName === "Example") {
-  //   Item.findByIdAndRemove(checkedItemID, function(err) {
-  //     if(err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log("Successfully deleted");
-  //       res.redirect("/");
-  //     }
-  //   });
-  // } else {
-  //   Location.findOneAndUpdate({name: locationName}, {$pull: {items: {_id: checkedItemID}}}, function(err, foundLocation) {
-  //     if (!err) {
-  //       res.redirect("/" + locationName);
-  //     } else {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
 });
 
 app.post("/edit/:itemName", function(req, res) {
-  const name = req.params.itemName;
-  const location = req.body.editedItem;
-  const itemId = req.body.itemId;
+  const name = req.params.itemName;   // Comes from the url.
+  const location = req.body.editedLocation;  // Comes from list.ejs 1st <form>
+  const itemId = req.body.itemId;  // Comes from list.ejs 1st <form>
 
   res.render('edit', {oldItem: name, locationName: location, itemId: itemId});
 });
 
 app.post("/:location", function(req, res) {
-  const location = req.params.location;
-  const newItem = req.body.newValue;
-  const oldItem = req.body.oldValue;
-  const itemId = req.body.itemId;
+  const location = req.params.location;   // Comes from the url.
+  const newItem = req.body.newValue;   // Comes from edit.ejs
+  const oldItem = req.body.oldValue;   // Comes from edit.ejs
+  const itemId = req.body.itemId;      // Comes from edit.ejs
 
-  if(location === "Example") {
-    Item.findOne({name: oldItem}, function(err, foundItem) {
-      if(err) {
-        console.log(err);
-      } else {
-        const id = foundItem._id;
-        Item.findByIdAndUpdate(id, {$set: {name: newItem}}, function(err) {
-          if(err) {
-            console.log(err);
-          } else {
-            console.log("Successfully edited");
-            res.redirect("/");
-          }
-        }); 
+  Location.findOne({name: location}, function(err, foundItem) {  //  foundItem is the matched object
+    if(err) {
+      console.log(err);
+    } else {
+      const id = foundItem._id;  // location id
+      const query = {"_id": id,
+        "items._id": itemId
       }
-    });
-  } else {
-
-    Location.findOne({name: location}, function(err, foundItem) {
-      if(err) {
-        console.log(err);
-      } else {
-        const id = foundItem._id;  // location id
-        const query = {"_id": id,
-          "items._id": itemId
+      Location.findOneAndUpdate(query, {$set: {"items.$.name": newItem }}, function(err, found) {    // 'items.$.name' checks the name property of objects inside the 'items' array.
+        if(err) {
+          console.log(err);
+        } else {
+          res.redirect(`/${location}`);
         }
-        Location.findOneAndUpdate(query, {$set: {"items.$.name": newItem }}, function(err, found) {
-          
-          if(err) {
-            console.log(err);
-          } else {
-            res.redirect(`/${location}`);
-          }
-        }); 
-      }
-    });
-  }
+      }); 
+    }
+  });
 });
 
 app.listen(3000, function() {
