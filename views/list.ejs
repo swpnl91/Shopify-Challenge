@@ -1,6 +1,5 @@
 <%- include("partials/header"); -%>
 
-
   <div class="box" id="heading">
     <h1> <%= locationTitle %> </h1>
   </div>
@@ -18,7 +17,6 @@
 
         <form action="/delete" method="post">
           <div class="itemName">
-            <!-- <input type="checkbox" name="checkbox" value="<%= newListItem._id %>" onChange="this.form.submit()"></input> -->
             <button type="submit" class="delete" name="checkbox" value="<%= newListItem._id %>"><i class="fa-solid fa-trash-can"></i></button>
             <p><%=  newListItem.name  %></p>
           </div>
@@ -31,10 +29,9 @@
 
       <form class="item" action="/" method="post">
         <input class="itemsList" type="text" name="newItem" placeholder="Add A New Item" autocomplete="off">
-        <button class="add" type="submit" name="location" value="<%= locationTitle %>">+</i></button>
+        <button class="add" type="submit" name="location" value="<%= locationTitle %>"><i class="fa-solid fa-plus"></i></button>
       </form>
   </div>
-
 
 <%- include("partials/footer"); -%>
 
