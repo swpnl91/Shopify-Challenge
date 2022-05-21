@@ -15,6 +15,10 @@
   background-color: #DDF8EC;
 }
 
+.navbar-brand:hover {
+  color: #042b22 !important;
+}
+
 .navbar-nav  li a:hover {
   color: #084a3c !important;
 }
@@ -161,6 +165,9 @@ button.locationDelete {
   margin-left: 20px;
 }
 
+.welcome {
+  margin-top: 100px;
+}
 
 .searchBox {
   max-width: 590px;
@@ -168,7 +175,7 @@ button.locationDelete {
   background: #BAD7F2;
   border-radius: 25px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
-  margin-top: 150px;
+  margin-top: 100px;
 }
 
 .searchInput {
@@ -294,4 +301,18 @@ margin-top: 20px;
 margin-bottom: 20px;
 font-size: 12px;
 color: #fff;
+}
+
+@media only screen and (max-width: 800px) {
+  .navbar.navbar-inverse .navbar-header .navbar-brand {
+    display: block;
+    text-align:center;
+    float: none;
+  }
+  
+  .navbar-align {
+    display: block;
+    text-align:center;
+    float: none;
+  }
 }
