@@ -14,6 +14,10 @@ This project was made as a part of the Shopify backend developer intern challeng
 
 
 
+https://user-images.githubusercontent.com/91759275/169674369-10b34515-303d-49ee-bdfe-18f71ac087e8.mov
+
+
+
 ## Dependencies
 
 - Node.js
